@@ -1,0 +1,64 @@
+{
+  "name": "react-native-segment-react-native-plugin-fullstory",
+  "version": "0.1.0",
+  "description": "Integrate FullStory with your Segment analytics in your React-Native app.",
+  "main": "lib/commonjs/index",
+  "module": "lib/module/index",
+  "types": "lib/typescript/index.d.ts",
+  "react-native": "src/index",
+  "source": "src/index",
+  "files": [
+    "src",
+    "lib",
+    "android",
+    "ios",
+    "cpp",
+    "*.podspec",
+    "!**/__tests__",
+    "!**/__fixtures__",
+    "!**/__mocks__",
+    "!**/.*"
+  ],
+  "scripts": {
+    "test": "jest",
+    "prepack": "bob build",
+    "typescript": "tsc --noEmit",
+    "clean": "rimraf lib node_modules"
+  },
+  "keywords": [
+    "fullstory",
+    "react-native",
+    "ios",
+    "android"
+  ],
+  "repository": "https://github.com/fullstorydev/segment-react-native-plugin-fullstory.git",
+  "author": "FullStory <ryanwang@fullstory.com> (https://github.com/fullstorydev/segment-react-native-plugin-fullstory.git)",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/fullstorydev/segment-react-native-plugin-fullstory.git/issues"
+  },
+  "homepage": "https://github.com/fullstorydev/segment-react-native-plugin-fullstory.git#readme",
+  "peerDependencies": {
+    "@segment/analytics-react-native": "*"
+  },
+  "devDependencies": {
+    "@types/jest": "^28.1.2",
+    "prettier": "^2.8.1",
+    "react-native-builder-bob": "^0.20.3",
+    "rimraf": "^3.0.2",
+    "ts-jest": "^29.0.3",
+    "typescript": "^4.5.2"
+  },
+  "react-native-builder-bob": {
+    "source": "src",
+    "output": "lib",
+    "targets": [
+      "commonjs",
+      "module",
+      "typescript"
+    ]
+  },
+  "engines": {
+    "node": ">=12"
+  }
+}
