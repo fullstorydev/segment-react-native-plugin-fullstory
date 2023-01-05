@@ -41,6 +41,9 @@
   "peerDependencies": {
     "@segment/analytics-react-native": "*"
   },
+  "dependencies": {
+    "@fullstory/react-native": "^1.1.1"
+  },
   "devDependencies": {
     "@types/jest": "^28.1.2",
     "prettier": "^2.8.1",
