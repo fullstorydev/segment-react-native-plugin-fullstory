@@ -7,6 +7,9 @@ install! 'cocoapods', :deterministic_uuids => false
 target 'SegmentFullStoryPluginExample' do
   config = use_native_modules!
 
+  pod 'FullStory', :http =>
+  'https://ios-releases.fullstory.com/fullstory-1.33.0-xcframework.tar.gz'
+
   # Flags change depending on the env values.
   flags = get_default_flags()
 

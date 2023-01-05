@@ -25,6 +25,12 @@ import {
   ReloadInstructions,
 } from 'react-native/Libraries/NewAppScreen';
 import { createClient } from '@segment/analytics-react-native';
+import FullStory from '@fullstory/react-native';
+
+FullStory.onReady().then(function (result) {
+  const replayStartUrl = result.replayStartUrl;
+  console.log('replayStartUrl: ', replayStartUrl);
+});
 
 const segmentClient = createClient({
   writeKey: 'SEGMENT_API_KEY',

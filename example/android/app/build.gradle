@@ -1,4 +1,10 @@
 apply plugin: "com.android.application"
+apply plugin: 'fullstory'
+
+fullstory {
+    org '<your-org-id>'
+    enabledVariants 'all'
+}
 
 import com.android.build.OutputFile
 import org.apache.tools.ant.taskdefs.condition.Os
