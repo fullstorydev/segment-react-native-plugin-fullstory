@@ -73,6 +73,9 @@ PODS:
     - FlipperKit/FlipperKitNetworkPlugin
   - fmt (6.2.1)
   - FullStory (1.33.0)
+  - fullstory_react-native (1.1.1):
+    - FullStory (~> 1.14)
+    - React
   - glog (0.3.5)
   - hermes-engine (0.70.6)
   - libevent (2.1.12)
@@ -408,6 +411,7 @@ DEPENDENCIES:
   - FlipperKit/FlipperKitUserDefaultsPlugin (= 0.125.0)
   - FlipperKit/SKIOSNetworkPlugin (= 0.125.0)
   - "FullStory (from `{:http=>\"https://ios-releases.fullstory.com/fullstory-1.33.0-xcframework.tar.gz\"}`)"
+  - "fullstory_react-native (from `../node_modules/@fullstory/react-native`)"
   - glog (from `../node_modules/react-native/third-party-podspecs/glog.podspec`)
   - hermes-engine (from `../node_modules/react-native/sdks/hermes/hermes-engine.podspec`)
   - libevent (~> 2.1.12)
@@ -475,6 +479,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native/React/FBReactNativeSpec"
   FullStory:
     :http: https://ios-releases.fullstory.com/fullstory-1.33.0-xcframework.tar.gz
+  fullstory_react-native:
+    :path: "../node_modules/@fullstory/react-native"
   glog:
     :podspec: "../node_modules/react-native/third-party-podspecs/glog.podspec"
   hermes-engine:
@@ -563,6 +569,7 @@ SPEC CHECKSUMS:
   FlipperKit: cbdee19bdd4e7f05472a66ce290f1b729ba3cb86
   fmt: ff9d55029c625d3757ed641535fd4a75fedc7ce9
   FullStory: ea209fcea08e975e755b794a770f975f23463f66
+  fullstory_react-native: dc86f7be644d03e387ddf5586f3c14b22fa78ce0
   glog: 04b94705f318337d7ead9e6d17c019bd9b1f6b1b
   hermes-engine: 2af7b7a59128f250adfd86f15aa1d5a2ecd39995
   libevent: 4049cae6c81cdb3654a443be001fb9bdceff7913
