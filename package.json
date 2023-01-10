@@ -63,5 +63,30 @@
   },
   "engines": {
     "node": ">=12"
+  },
+  "jest": {
+    "preset": "react-native",
+    "testEnvironment": "node",
+    "moduleFileExtensions": [
+      "ts",
+      "tsx",
+      "js"
+    ],
+    "globals": {
+      "ts-jest": {
+        "tsConfig": "./tsconfig.json",
+        "diagnostics": false
+      }
+    },
+    "setupFiles": [
+      "./src/__tests__/setup.js"
+    ],
+    "modulePathIgnorePatterns": [
+      "<rootDir>/example/*",
+      "<rootDir>/lib/"
+    ],
+    "testMatch": [
+      "**/*.test.(ts|tsx)"
+    ]
   }
 }

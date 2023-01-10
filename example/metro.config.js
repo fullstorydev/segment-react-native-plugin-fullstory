@@ -5,7 +5,19 @@
  * @format
  */
 
+const path = require('path');
+
+const thirdPartyPath = path.resolve(__dirname, '../');
+
+const watchFolders = [thirdPartyPath];
+
 module.exports = {
+  resolver: {
+    extraNodeModules: {
+      '@fullstory/segment-react-native-plugin-fullstory': thirdPartyPath,
+    },
+  },
+  watchFolders,
   transformer: {
     getTransformOptions: async () => ({
       transform: {
