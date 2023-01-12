@@ -1,15 +1,22 @@
+import {
+  eCommerceEventsProductListFilteredProcessed,
+  eCommerceEventsProductListFilteredRaw,
+} from './__fixtures__/FSSampleEvents';
 import { FSSuffixedProperties } from '../utils/FSSuffixedProperties';
 
 describe('FSSuffixedProperties', () => {
-  const fsSuffixedProperties = new FSSuffixedProperties();
+  const fsSuffixedProperties = new FSSuffixedProperties({});
 
   describe('Test getSuffixStringFromSimpleObject()', () => {
-    test('Should return correct Date suffix', () => {
-      const validDate = new Date();
-      expect(
-        fsSuffixedProperties.getSuffixStringFromSimpleObject(validDate)
-      ).toBe('_date');
-    });
+    // TODO: JsonValue does not include dates
+    // test('Should return correct Date suffix', () => {
+    //   const validDate = new Date();
+    //   expect(
+    //     fsSuffixedProperties.getSuffixStringFromSimpleObject(
+    //       validDate.toString()
+    //     )
+    //   ).toBe('_date');
+    // });
     test('Should return correct String suffix', () => {
       expect(
         fsSuffixedProperties.getSuffixStringFromSimpleObject('sample string')
@@ -37,7 +44,7 @@ describe('FSSuffixedProperties', () => {
 
   describe('Test addSimpleObject()', () => {
     beforeEach(() => {
-      fsSuffixedProperties.suffixedProperties = {};
+      fsSuffixedProperties.initialize({});
     });
 
     test('Should add simple string object', () => {
@@ -45,7 +52,9 @@ describe('FSSuffixedProperties', () => {
       const val = 'val';
       fsSuffixedProperties.addSimpleObject(key, val);
 
-      expect(fsSuffixedProperties.suffixedProperties).toEqual({ [key]: val });
+      expect(fsSuffixedProperties.getSuffixedProperties()).toEqual({
+        [key]: val,
+      });
     });
 
     test('Should add duplicate simple string object', () => {
@@ -57,39 +66,61 @@ describe('FSSuffixedProperties', () => {
       fsSuffixedProperties.addSimpleObject(key, val2);
       fsSuffixedProperties.addSimpleObject(key, val3);
 
-      expect(fsSuffixedProperties.suffixedProperties).toEqual({
+      expect(fsSuffixedProperties.getSuffixedProperties()).toEqual({
         [key]: [val, val2, val3],
       });
     });
   });
 
-  describe('Test pluralizeAllArrayKeys()', () => {
+  describe('Test initialize()', () => {
     beforeEach(() => {
-      fsSuffixedProperties.suffixedProperties = {};
+      fsSuffixedProperties.initialize({});
     });
 
-    test('Should not pluralize', () => {
-      const key = 'input.key_str';
-      const val = 'val';
-      fsSuffixedProperties.addSimpleObject(key, val);
-      fsSuffixedProperties.pluralizeAllArrayKeys();
+    test('Should flatten map', () => {
+      const data = {
+        input: [
+          { key1: 'val1', key2: 'val2' },
+          { key1: 'secondVal1', key2: 'secondVal2' },
+        ],
+      };
 
-      expect(fsSuffixedProperties.suffixedProperties).toEqual({ [key]: val });
-    });
+      fsSuffixedProperties.initialize(data);
 
-    test('Should pluralize', () => {
-      const key = 'input.key_str';
-      const val = 'val';
-      const val2 = 'val2';
-      const val3 = 'val3';
-      fsSuffixedProperties.addSimpleObject(key, val);
-      fsSuffixedProperties.addSimpleObject(key, val2);
-      fsSuffixedProperties.addSimpleObject(key, val3);
-      fsSuffixedProperties.pluralizeAllArrayKeys();
-
-      expect(fsSuffixedProperties.suffixedProperties).toEqual({
-        ['input.key_strs']: [val, val2, val3],
+      expect(fsSuffixedProperties.getSuffixedProperties()).toEqual({
+        ['input.key1_strs']: ['val1', 'secondVal1'],
+        ['input.key2_strs']: ['val2', 'secondVal2'],
       });
+    });
+
+    test('Should return correct suffixed keys', () => {
+      // TODO: JsonValue does not include dates
+      // const date = new Date();
+      const data = {
+        int: 3,
+        float: 3.14,
+        bool: true,
+        // date: date,
+        strings: ['hello', 'goodbye'],
+      };
+
+      fsSuffixedProperties.initialize(data);
+
+      expect(fsSuffixedProperties.getSuffixedProperties()).toEqual({
+        ['int_int']: 3,
+        ['float_real']: 3.14,
+        ['bool_bool']: true,
+        // ['date_date']: date,
+        ['strings_strs']: ['hello', 'goodbye'],
+      });
+    });
+
+    test('Should return correct EcommerceEvent', () => {
+      fsSuffixedProperties.initialize(eCommerceEventsProductListFilteredRaw);
+
+      expect(fsSuffixedProperties.getSuffixedProperties()).toEqual(
+        eCommerceEventsProductListFilteredProcessed
+      );
     });
   });
 });
