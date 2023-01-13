@@ -11,4 +11,5 @@ jest.mock('@fullstory/react-native', () => ({
   event: jest.fn(),
   onReady: jest.fn(() => Promise.resolve({ replayStartUrl: 'sampleurl.com' })),
   identify: jest.fn(),
+  anonymize: jest.fn(),
 }));

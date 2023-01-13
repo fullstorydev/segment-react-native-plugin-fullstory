@@ -71,6 +71,10 @@ export class FullStoryPlugin extends Plugin {
     return event;
   }
 
+  reset() {
+    FullStory.anonymize();
+  }
+
   addFSUrlToProperties(event: TrackEventType) {
     if (!event.properties) {
       event.properties = {};

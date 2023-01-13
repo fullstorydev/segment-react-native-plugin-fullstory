@@ -67,6 +67,14 @@ const App = () => {
           >
             <Text>Send Identify</Text>
           </TouchableOpacity>
+          <TouchableOpacity
+            style={styles.button}
+            onPress={() => {
+              segmentClient.reset();
+            }}
+          >
+            <Text>Reset</Text>
+          </TouchableOpacity>
         </View>
       </ScrollView>
     </SafeAreaView>

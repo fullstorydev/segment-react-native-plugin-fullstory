@@ -80,7 +80,7 @@ describe('FullStoryConfig', () => {
         ...TRACK_EVENT,
       });
 
-      expect(FullStory.event).toHaveBeenCalled();
+      expect(FullStory.event).toHaveBeenCalledTimes(1);
     });
 
     test('Should send track events with allowlistTrackEvents', () => {
@@ -93,7 +93,7 @@ describe('FullStoryConfig', () => {
         ...TRACK_EVENT,
       });
 
-      expect(FullStory.event).toHaveBeenCalled();
+      expect(FullStory.event).toHaveBeenCalledTimes(1);
     });
   });
 
@@ -120,6 +120,16 @@ describe('FullStoryConfig', () => {
       });
 
       expect(FullStory.identify).not.toHaveBeenCalled();
+    });
+  });
+
+  describe('Test reset', () => {
+    test('Should call FS anonymize', () => {
+      const plugin = new FullStoryPlugin({});
+
+      plugin.reset();
+
+      expect(FullStory.anonymize).toHaveBeenCalledTimes(1);
     });
   });
 });
