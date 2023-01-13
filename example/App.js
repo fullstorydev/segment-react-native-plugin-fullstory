@@ -75,6 +75,14 @@ const App = () => {
           >
             <Text>Reset</Text>
           </TouchableOpacity>
+          <TouchableOpacity
+            style={styles.button}
+            onPress={() => {
+              segmentClient.screen('Home Screen', { productId: 123 });
+            }}
+          >
+            <Text>Send Screen</Text>
+          </TouchableOpacity>
         </View>
       </ScrollView>
     </SafeAreaView>
@@ -84,6 +92,7 @@ const App = () => {
 const styles = StyleSheet.create({
   buttonContainer: {
     flexDirection: 'row',
+    flexWrap: 'wrap',
   },
   button: {
     backgroundColor: 'gray',

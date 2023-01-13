@@ -1,3 +1,10 @@
+import {
+  EventType,
+  TrackEventType,
+  IdentifyEventType,
+  ScreenEventType,
+} from '@segment/analytics-react-native';
+
 export const eCommerceEventsProductListFilteredRaw = {
   list_id: 'todays_deals_may_11_2019',
   filters: [
@@ -55,4 +62,22 @@ export const eCommerceEventsProductListFilteredProcessed = {
   'products.category_strs': ['Beauty', 'Beauty'],
   'products.url_str': 'https://www.example.com/product/path',
   'products.image_url_str': 'https://www.example.com/product/path.jpg',
+};
+
+export const EVENT_NAME = 'sample event';
+const SCREEN_NAME = 'sample screen';
+
+export const trackEvent: TrackEventType = {
+  type: EventType.TrackEvent,
+  event: EVENT_NAME,
+};
+
+export const identifyEvent: IdentifyEventType = {
+  type: EventType.IdentifyEvent,
+};
+
+export const screenEvent: ScreenEventType = {
+  type: EventType.ScreenEvent,
+  name: SCREEN_NAME,
+  properties: {},
 };

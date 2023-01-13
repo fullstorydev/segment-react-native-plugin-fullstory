@@ -3,6 +3,7 @@ import {
   TrackEventType,
   SegmentEvent,
   Plugin,
+  ScreenEventType,
 } from '@segment/analytics-react-native';
 import FullStory from '@fullstory/react-native';
 import { FSSuffixedProperties } from './utils/FSSuffixedProperties';
@@ -12,12 +13,14 @@ interface FullStoryPluginConfig {
   allowlistAllTrackEvents?: boolean;
   allowlistTrackEvents?: Array<string>;
   enableIdentifyEvents?: boolean;
+  enableSendScreenAsEvents?: boolean;
 }
 
 const FULLSTORY_PLUGIN_CONFIG_DEFAULTS: FullStoryPluginConfig = {
   enableFSSessionUrlInEvents: true,
   allowlistAllTrackEvents: false,
   enableIdentifyEvents: true,
+  enableSendScreenAsEvents: false,
 };
 
 export class FullStoryPlugin extends Plugin {
@@ -25,6 +28,7 @@ export class FullStoryPlugin extends Plugin {
   public allowlistAllTrackEvents;
   public allowlistTrackEvents;
   public enableIdentifyEvents;
+  public enableSendScreenAsEvents;
 
   private fsSessionUrl = '';
 
@@ -43,6 +47,7 @@ export class FullStoryPlugin extends Plugin {
     this.allowlistAllTrackEvents = config.allowlistAllTrackEvents;
     this.allowlistTrackEvents = config.allowlistTrackEvents;
     this.enableIdentifyEvents = config.enableIdentifyEvents;
+    this.enableSendScreenAsEvents = config.enableSendScreenAsEvents;
   }
 
   execute(event: SegmentEvent) {
@@ -66,6 +71,15 @@ export class FullStoryPlugin extends Plugin {
           FullStory.identify(event.userId || '', event.traits);
         }
         break;
+      case 'screen':
+        if (this.enableSendScreenAsEvents) {
+          FullStory.event('Segment Screen: ' + event.name, event.properties);
+
+          if (this.enableFSSessionURLInEvents && this.fsSessionUrl) {
+            this.addFSUrlToProperties(event as ScreenEventType);
+          }
+        }
+        break;
     }
 
     return event;
@@ -75,7 +89,7 @@ export class FullStoryPlugin extends Plugin {
     FullStory.anonymize();
   }
 
-  addFSUrlToProperties(event: TrackEventType) {
+  addFSUrlToProperties(event: TrackEventType | ScreenEventType) {
     if (!event.properties) {
       event.properties = {};
     }

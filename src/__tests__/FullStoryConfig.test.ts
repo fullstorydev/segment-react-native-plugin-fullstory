@@ -1,21 +1,12 @@
 import { FullStoryPlugin } from '../FullStoryConfig';
-import {
-  EventType,
-  TrackEventType,
-  IdentifyEventType,
-} from '@segment/analytics-react-native';
+import type { TrackEventType } from '@segment/analytics-react-native';
 import FullStory from '@fullstory/react-native';
-
-const EVENT_NAME = 'sample event';
-
-const TRACK_EVENT: TrackEventType = {
-  type: EventType.TrackEvent,
-  event: EVENT_NAME,
-};
-
-const IDENTIFY_EVENT: IdentifyEventType = {
-  type: EventType.IdentifyEvent,
-};
+import {
+  EVENT_NAME,
+  identifyEvent,
+  screenEvent,
+  trackEvent,
+} from './__fixtures__/FSSampleEvents';
 
 interface TrackEventTypeWIthFSUrl extends TrackEventType {
   properties: {
@@ -38,7 +29,7 @@ describe('FullStoryConfig', () => {
       await new Promise(process.nextTick);
 
       const event = plugin.execute({
-        ...TRACK_EVENT,
+        ...trackEvent,
       }) as TrackEventTypeWIthFSUrl;
 
       expect(event.properties.fullstoryUrl).toBe('sampleurl.com');
@@ -52,7 +43,7 @@ describe('FullStoryConfig', () => {
 
       await new Promise(process.nextTick);
 
-      const event = plugin.execute({ ...TRACK_EVENT }) as TrackEventType;
+      const event = plugin.execute({ ...trackEvent }) as TrackEventType;
 
       expect(event.properties).toBe(undefined);
     });
@@ -65,7 +56,7 @@ describe('FullStoryConfig', () => {
       });
 
       plugin.execute({
-        ...TRACK_EVENT,
+        ...trackEvent,
       });
 
       expect(FullStory.event).not.toHaveBeenCalled();
@@ -77,7 +68,7 @@ describe('FullStoryConfig', () => {
       });
 
       plugin.execute({
-        ...TRACK_EVENT,
+        ...trackEvent,
       });
 
       expect(FullStory.event).toHaveBeenCalledTimes(1);
@@ -90,7 +81,7 @@ describe('FullStoryConfig', () => {
       });
 
       plugin.execute({
-        ...TRACK_EVENT,
+        ...trackEvent,
       });
 
       expect(FullStory.event).toHaveBeenCalledTimes(1);
@@ -104,7 +95,7 @@ describe('FullStoryConfig', () => {
       });
 
       plugin.execute({
-        ...IDENTIFY_EVENT,
+        ...identifyEvent,
       });
 
       expect(FullStory.identify).toHaveBeenCalledTimes(1);
@@ -116,7 +107,7 @@ describe('FullStoryConfig', () => {
       });
 
       plugin.execute({
-        ...IDENTIFY_EVENT,
+        ...identifyEvent,
       });
 
       expect(FullStory.identify).not.toHaveBeenCalled();
@@ -130,6 +121,18 @@ describe('FullStoryConfig', () => {
       plugin.reset();
 
       expect(FullStory.anonymize).toHaveBeenCalledTimes(1);
+    });
+  });
+
+  describe('Test enableSendScreenAsEvents', () => {
+    test('Should call FS event', () => {
+      const plugin = new FullStoryPlugin({ enableSendScreenAsEvents: true });
+
+      plugin.execute({
+        ...screenEvent,
+      });
+
+      expect(FullStory.event).toHaveBeenCalledTimes(1);
     });
   });
 });
