@@ -11,17 +11,20 @@ interface FullStoryPluginConfig {
   enableFSSessionUrlInEvents?: boolean;
   allowlistAllTrackEvents?: boolean;
   allowlistTrackEvents?: Array<string>;
+  enableIdentifyEvents?: boolean;
 }
 
 const FULLSTORY_PLUGIN_CONFIG_DEFAULTS: FullStoryPluginConfig = {
   enableFSSessionUrlInEvents: true,
   allowlistAllTrackEvents: false,
+  enableIdentifyEvents: true,
 };
 
 export class FullStoryPlugin extends Plugin {
   public enableFSSessionURLInEvents;
   public allowlistAllTrackEvents;
   public allowlistTrackEvents;
+  public enableIdentifyEvents;
 
   private fsSessionUrl = '';
 
@@ -39,6 +42,7 @@ export class FullStoryPlugin extends Plugin {
     this.enableFSSessionURLInEvents = config.enableFSSessionUrlInEvents;
     this.allowlistAllTrackEvents = config.allowlistAllTrackEvents;
     this.allowlistTrackEvents = config.allowlistTrackEvents;
+    this.enableIdentifyEvents = config.enableIdentifyEvents;
   }
 
   execute(event: SegmentEvent) {
@@ -58,6 +62,9 @@ export class FullStoryPlugin extends Plugin {
         }
         break;
       case 'identify':
+        if (this.enableIdentifyEvents) {
+          FullStory.identify(event.userId || '', event.traits);
+        }
         break;
     }
 

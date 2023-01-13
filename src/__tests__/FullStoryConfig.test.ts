@@ -1,5 +1,9 @@
 import { FullStoryPlugin } from '../FullStoryConfig';
-import { EventType, TrackEventType } from '@segment/analytics-react-native';
+import {
+  EventType,
+  TrackEventType,
+  IdentifyEventType,
+} from '@segment/analytics-react-native';
 import FullStory from '@fullstory/react-native';
 
 const EVENT_NAME = 'sample event';
@@ -7,6 +11,10 @@ const EVENT_NAME = 'sample event';
 const TRACK_EVENT: TrackEventType = {
   type: EventType.TrackEvent,
   event: EVENT_NAME,
+};
+
+const IDENTIFY_EVENT: IdentifyEventType = {
+  type: EventType.IdentifyEvent,
 };
 
 interface TrackEventTypeWIthFSUrl extends TrackEventType {
@@ -58,7 +66,7 @@ describe('FullStoryConfig', () => {
 
       plugin.execute({
         ...TRACK_EVENT,
-      }) as TrackEventTypeWIthFSUrl;
+      });
 
       expect(FullStory.event).not.toHaveBeenCalled();
     });
@@ -70,7 +78,7 @@ describe('FullStoryConfig', () => {
 
       plugin.execute({
         ...TRACK_EVENT,
-      }) as TrackEventTypeWIthFSUrl;
+      });
 
       expect(FullStory.event).toHaveBeenCalled();
     });
@@ -83,9 +91,35 @@ describe('FullStoryConfig', () => {
 
       plugin.execute({
         ...TRACK_EVENT,
-      }) as TrackEventTypeWIthFSUrl;
+      });
 
       expect(FullStory.event).toHaveBeenCalled();
+    });
+  });
+
+  describe('Test allowlistTrackEvents', () => {
+    test('Should send identify event', () => {
+      const plugin = new FullStoryPlugin({
+        enableIdentifyEvents: true,
+      });
+
+      plugin.execute({
+        ...IDENTIFY_EVENT,
+      });
+
+      expect(FullStory.identify).toHaveBeenCalledTimes(1);
+    });
+
+    test('Should not send identify event', () => {
+      const plugin = new FullStoryPlugin({
+        enableIdentifyEvents: false,
+      });
+
+      plugin.execute({
+        ...IDENTIFY_EVENT,
+      });
+
+      expect(FullStory.identify).not.toHaveBeenCalled();
     });
   });
 });
