@@ -1,31 +1,61 @@
 import {
-  DestinationPlugin,
-  IdentifyEventType,
   PluginType,
   TrackEventType,
-  SegmentAPISettings,
+  SegmentEvent,
+  Plugin,
 } from '@segment/analytics-react-native';
+import FullStory from '@fullstory/react-native';
+import { FSSuffixedProperties } from './utils/FSSuffixedProperties';
 
-export class FullStoryPlugin extends DestinationPlugin {
-  type = PluginType.destination;
+interface FullStoryPluginConfig {
+  enableFSSessionUrlInEvents?: boolean;
+}
 
-  update(settings: SegmentAPISettings) {
-    console.log('settings', settings);
-    return;
+const FULLSTORY_PLUGIN_CONFIG_DEFAULTS: FullStoryPluginConfig = {
+  enableFSSessionUrlInEvents: true,
+};
+
+export class FullStoryPlugin extends Plugin {
+  public enableFSSessionURLInEvents;
+  private fsSessionUrl = '';
+
+  type = PluginType.enrichment;
+
+  constructor(userConfig: FullStoryPluginConfig) {
+    super();
+
+    FullStory.onReady().then((result) => {
+      this.fsSessionUrl = result.replayStartUrl;
+    });
+
+    const config = { ...FULLSTORY_PLUGIN_CONFIG_DEFAULTS, ...userConfig };
+
+    this.enableFSSessionURLInEvents = config.enableFSSessionUrlInEvents;
   }
 
-  identify(event: IdentifyEventType) {
-    console.log('identify', event);
+  execute(event: SegmentEvent) {
+    switch (event.type) {
+      case 'track':
+        const fsProps = new FSSuffixedProperties(event.properties);
+        FullStory.event(event.event, fsProps.getSuffixedProperties());
+
+        if (this.enableFSSessionURLInEvents && this.fsSessionUrl) {
+          this.addFSUrlToProperties(event as TrackEventType);
+        }
+
+        break;
+      case 'identify':
+        break;
+    }
+
     return event;
   }
 
-  track(event: TrackEventType) {
-    console.log('track', event);
-    return event;
-  }
+  addFSUrlToProperties(event: TrackEventType) {
+    if (!event.properties) {
+      event.properties = {};
+    }
 
-  reset() {
-    console.log('reset');
-    return;
+    event.properties.fullstoryUrl = this.fsSessionUrl;
   }
 }

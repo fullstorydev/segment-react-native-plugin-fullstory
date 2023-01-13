@@ -9,4 +9,5 @@ jest.mock('@segment/sovran-react-native', () => ({
 
 jest.mock('@fullstory/react-native', () => ({
   event: jest.fn(),
+  onReady: jest.fn(() => Promise.resolve({ replayStartUrl: 'sampleurl.com' })),
 }));
