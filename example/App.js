@@ -26,7 +26,11 @@ const segmentClient = createClient({
 });
 
 segmentClient.add({
-  plugin: new FullStoryPlugin({ allowlistAllTrackEvents: true }),
+  plugin: new FullStoryPlugin({
+    allowlistAllTrackEvents: true,
+    enableSendScreenAsEvents: true,
+    enableGroupTraitsAsUserVars: true,
+  }),
 });
 
 const App = () => {
@@ -57,12 +61,12 @@ const App = () => {
               });
             }}
           >
-            <Text>Send event</Text>
+            <Text>Send Track</Text>
           </TouchableOpacity>
           <TouchableOpacity
             style={styles.button}
             onPress={() => {
-              segmentClient.identify('tired', { name: 'john' });
+              segmentClient.identify('userId', { name: 'john' });
             }}
           >
             <Text>Send Identify</Text>
@@ -73,7 +77,7 @@ const App = () => {
               segmentClient.reset();
             }}
           >
-            <Text>Reset</Text>
+            <Text>Send Reset</Text>
           </TouchableOpacity>
           <TouchableOpacity
             style={styles.button}
@@ -82,6 +86,14 @@ const App = () => {
             }}
           >
             <Text>Send Screen</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={styles.button}
+            onPress={() => {
+              segmentClient.group('group123', { name: 'sample group' });
+            }}
+          >
+            <Text>Send Group</Text>
           </TouchableOpacity>
         </View>
       </ScrollView>

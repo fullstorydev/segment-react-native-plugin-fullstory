@@ -3,6 +3,7 @@ import {
   TrackEventType,
   IdentifyEventType,
   ScreenEventType,
+  GroupEventType,
 } from '@segment/analytics-react-native';
 
 export const eCommerceEventsProductListFilteredRaw = {
@@ -65,19 +66,48 @@ export const eCommerceEventsProductListFilteredProcessed = {
 };
 
 export const EVENT_NAME = 'sample event';
-const SCREEN_NAME = 'sample screen';
+export const GROUP_ID = 'sample groupID';
+export const SAMPLE_TRAIT = 'sample trait';
+export const USER_ID = 'user123';
+export const SAMPLE_PROPERTY = 'sample property';
+export const SCREEN_NAME = 'sample screen';
 
-export const trackEvent: TrackEventType = {
-  type: EventType.TrackEvent,
-  event: EVENT_NAME,
+export const generateTrackEvent = (): TrackEventType => {
+  return {
+    type: EventType.TrackEvent,
+    event: EVENT_NAME,
+    properties: {
+      sampleProperty: SAMPLE_PROPERTY,
+    },
+  };
 };
 
-export const identifyEvent: IdentifyEventType = {
-  type: EventType.IdentifyEvent,
+export const generateIdentifyEvent = (): IdentifyEventType => {
+  return {
+    type: EventType.IdentifyEvent,
+    userId: USER_ID,
+    traits: {
+      sampleTrait: SAMPLE_TRAIT,
+    },
+  };
 };
 
-export const screenEvent: ScreenEventType = {
-  type: EventType.ScreenEvent,
-  name: SCREEN_NAME,
-  properties: {},
+export const generateScreenEvent = (): ScreenEventType => {
+  return {
+    type: EventType.ScreenEvent,
+    name: SCREEN_NAME,
+    properties: {
+      sampleProperty: SAMPLE_PROPERTY,
+    },
+  };
+};
+
+export const generateGroupEvent = (): GroupEventType => {
+  return {
+    type: EventType.GroupEvent,
+    groupId: GROUP_ID,
+    traits: {
+      sampleTrait: SAMPLE_TRAIT,
+    },
+  };
 };

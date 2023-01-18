@@ -50,13 +50,14 @@ segmentClient.add({ plugin });
 
 The plugin accepts a configuration object with the following properties:
 
-| Property                   | Description                                                                                                    |
-| -------------------------- | -------------------------------------------------------------------------------------------------------------- |
-| enableFSSessionUrlInEvents | Inserts FS session URL to Segment event properties. Defaults to `true`.                                        |
-| allowlistAllTrackEvents    | Send all track events as FS custom events. Defaults to `false`.                                                |
-| enableIdentifyEvents       | Enable Segment identify events to be sent as FS identify events. Defaults to `true`                            |
-| allowlistTrackEvents       | An array of event names to allow to send to FullStory. To allowlist all events, use `allowlistAllTrackEvents`. |
-| enableSendScreenAsEvents   | Send screen events as FS custom events. Defaults to `false` .                                                  |
+| Property                    | Description                                                                                                    |
+| --------------------------- | -------------------------------------------------------------------------------------------------------------- |
+| enableFSSessionUrlInEvents  | Insert FS session URL to Segment event properties. Defaults to `true`.                                         |
+| allowlistAllTrackEvents     | Send all track events as FS custom events. Defaults to `false`.                                                |
+| enableIdentifyEvents        | Enable Segment identify events to be sent as FS identify events. Defaults to `true`.                           |
+| allowlistTrackEvents        | An array of event names to allow to send to FullStory. To allowlist all events, use `allowlistAllTrackEvents`. |
+| enableSendScreenAsEvents    | Send screen events as FS custom events. Defaults to `false`.                                                   |
+| enableGroupTraitsAsUserVars | Enable group event traits to be passed into FS user vars. Defaults to `false`.                                 |
 
 ## Example
 

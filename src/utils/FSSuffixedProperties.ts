@@ -50,7 +50,7 @@ export class FSSuffixedProperties {
   getSuffixStringFromSimpleObject(item: JsonValue): String {
     let suffix = '';
 
-    if (!isNaN(Number(item)) && !isNaN(parseFloat(String(item)))) {
+    if (typeof item === 'number') {
       if (Number.isInteger(item)) {
         suffix = '_int';
       } else {

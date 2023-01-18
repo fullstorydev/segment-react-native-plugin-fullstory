@@ -14,6 +14,7 @@ interface FullStoryPluginConfig {
   allowlistTrackEvents?: Array<string>;
   enableIdentifyEvents?: boolean;
   enableSendScreenAsEvents?: boolean;
+  enableGroupTraitsAsUserVars?: boolean;
 }
 
 const FULLSTORY_PLUGIN_CONFIG_DEFAULTS: FullStoryPluginConfig = {
@@ -21,6 +22,7 @@ const FULLSTORY_PLUGIN_CONFIG_DEFAULTS: FullStoryPluginConfig = {
   allowlistAllTrackEvents: false,
   enableIdentifyEvents: true,
   enableSendScreenAsEvents: false,
+  enableGroupTraitsAsUserVars: false,
 };
 
 export class FullStoryPlugin extends Plugin {
@@ -29,6 +31,7 @@ export class FullStoryPlugin extends Plugin {
   public allowlistTrackEvents;
   public enableIdentifyEvents;
   public enableSendScreenAsEvents;
+  public enableGroupTraitsAsUserVars;
 
   private fsSessionUrl = '';
 
@@ -48,6 +51,7 @@ export class FullStoryPlugin extends Plugin {
     this.allowlistTrackEvents = config.allowlistTrackEvents;
     this.enableIdentifyEvents = config.enableIdentifyEvents;
     this.enableSendScreenAsEvents = config.enableSendScreenAsEvents;
+    this.enableGroupTraitsAsUserVars = config.enableGroupTraitsAsUserVars;
   }
 
   execute(event: SegmentEvent) {
@@ -68,17 +72,34 @@ export class FullStoryPlugin extends Plugin {
         break;
       case 'identify':
         if (this.enableIdentifyEvents) {
-          FullStory.identify(event.userId || '', event.traits);
+          const traits = new FSSuffixedProperties(
+            event.traits
+          ).getSuffixedProperties();
+          FullStory.identify(event.userId || '', traits);
         }
         break;
       case 'screen':
         if (this.enableSendScreenAsEvents) {
-          FullStory.event('Segment Screen: ' + event.name, event.properties);
+          const properties = new FSSuffixedProperties(
+            event.properties
+          ).getSuffixedProperties();
 
+          FullStory.event('Segment Screen: ' + event.name, properties);
           if (this.enableFSSessionURLInEvents && this.fsSessionUrl) {
             this.addFSUrlToProperties(event as ScreenEventType);
           }
         }
+        break;
+      case 'group':
+        let traits;
+
+        if (this.enableGroupTraitsAsUserVars) {
+          traits = new FSSuffixedProperties(
+            event.traits
+          ).getSuffixedProperties();
+        }
+
+        FullStory.setUserVars({ groupID_str: event.groupId, ...traits });
         break;
     }
 

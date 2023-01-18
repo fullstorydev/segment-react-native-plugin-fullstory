@@ -3,9 +3,15 @@ import type { TrackEventType } from '@segment/analytics-react-native';
 import FullStory from '@fullstory/react-native';
 import {
   EVENT_NAME,
-  identifyEvent,
-  screenEvent,
-  trackEvent,
+  generateGroupEvent,
+  generateIdentifyEvent,
+  generateScreenEvent,
+  generateTrackEvent,
+  GROUP_ID,
+  SAMPLE_PROPERTY,
+  SAMPLE_TRAIT,
+  SCREEN_NAME,
+  USER_ID,
 } from './__fixtures__/FSSampleEvents';
 
 interface TrackEventTypeWIthFSUrl extends TrackEventType {
@@ -18,7 +24,6 @@ describe('FullStoryConfig', () => {
   afterEach(() => {
     jest.clearAllMocks();
   });
-
   describe('Test enableFSSessionURLInEvents', () => {
     test('Should have FSUrl with enableFSSessionURLInEvents: true', async () => {
       const plugin = new FullStoryPlugin({
@@ -29,7 +34,7 @@ describe('FullStoryConfig', () => {
       await new Promise(process.nextTick);
 
       const event = plugin.execute({
-        ...trackEvent,
+        ...generateTrackEvent(),
       }) as TrackEventTypeWIthFSUrl;
 
       expect(event.properties.fullstoryUrl).toBe('sampleurl.com');
@@ -43,9 +48,11 @@ describe('FullStoryConfig', () => {
 
       await new Promise(process.nextTick);
 
-      const event = plugin.execute({ ...trackEvent }) as TrackEventType;
+      const event = plugin.execute({
+        ...generateTrackEvent(),
+      }) as TrackEventType;
 
-      expect(event.properties).toBe(undefined);
+      expect(event.properties?.fullstoryUrl).toBe(undefined);
     });
   });
 
@@ -56,7 +63,7 @@ describe('FullStoryConfig', () => {
       });
 
       plugin.execute({
-        ...trackEvent,
+        ...generateTrackEvent(),
       });
 
       expect(FullStory.event).not.toHaveBeenCalled();
@@ -68,10 +75,12 @@ describe('FullStoryConfig', () => {
       });
 
       plugin.execute({
-        ...trackEvent,
+        ...generateTrackEvent(),
       });
 
-      expect(FullStory.event).toHaveBeenCalledTimes(1);
+      expect(FullStory.event).toHaveBeenCalledWith(EVENT_NAME, {
+        sampleProperty_str: SAMPLE_PROPERTY,
+      });
     });
 
     test('Should send track events with allowlistTrackEvents', () => {
@@ -81,10 +90,12 @@ describe('FullStoryConfig', () => {
       });
 
       plugin.execute({
-        ...trackEvent,
+        ...generateTrackEvent(),
       });
 
-      expect(FullStory.event).toHaveBeenCalledTimes(1);
+      expect(FullStory.event).toHaveBeenCalledWith(EVENT_NAME, {
+        sampleProperty_str: SAMPLE_PROPERTY,
+      });
     });
   });
 
@@ -95,10 +106,12 @@ describe('FullStoryConfig', () => {
       });
 
       plugin.execute({
-        ...identifyEvent,
+        ...generateIdentifyEvent(),
       });
 
-      expect(FullStory.identify).toHaveBeenCalledTimes(1);
+      expect(FullStory.identify).toHaveBeenCalledWith(USER_ID, {
+        sampleTrait_str: SAMPLE_TRAIT,
+      });
     });
 
     test('Should not send identify event', () => {
@@ -107,7 +120,7 @@ describe('FullStoryConfig', () => {
       });
 
       plugin.execute({
-        ...identifyEvent,
+        ...generateIdentifyEvent(),
       });
 
       expect(FullStory.identify).not.toHaveBeenCalled();
@@ -129,10 +142,44 @@ describe('FullStoryConfig', () => {
       const plugin = new FullStoryPlugin({ enableSendScreenAsEvents: true });
 
       plugin.execute({
-        ...screenEvent,
+        ...generateScreenEvent(),
       });
 
-      expect(FullStory.event).toHaveBeenCalledTimes(1);
+      expect(FullStory.event).toHaveBeenCalledWith(
+        'Segment Screen: ' + SCREEN_NAME,
+        { sampleProperty_str: SAMPLE_PROPERTY }
+      );
+    });
+  });
+
+  describe('Test enableGroupTraitsAsUserVars', () => {
+    test('Should send FS userVars without traits', () => {
+      const plugin = new FullStoryPlugin({
+        enableGroupTraitsAsUserVars: false,
+      });
+
+      plugin.execute({
+        ...generateGroupEvent(),
+      });
+
+      expect(FullStory.setUserVars).toHaveBeenCalledWith({
+        groupID_str: GROUP_ID,
+      });
+    });
+
+    test('Should send FS userVars with traits', () => {
+      const plugin = new FullStoryPlugin({
+        enableGroupTraitsAsUserVars: true,
+      });
+
+      plugin.execute({
+        ...generateGroupEvent(),
+      });
+
+      expect(FullStory.setUserVars).toHaveBeenCalledWith({
+        groupID_str: GROUP_ID,
+        sampleTrait_str: SAMPLE_TRAIT,
+      });
     });
   });
 });
