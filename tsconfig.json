@@ -2,7 +2,7 @@
   "compilerOptions": {
     "baseUrl": "./",
     "paths": {
-      "react-native-segment-react-native-plugin-fullstory": ["./src/index"]
+      "@fullstory/segment-react-native-plugin-fullstory": ["./src/index"]
     },
     "allowUnreachableCode": false,
     "allowUnusedLabels": false,
