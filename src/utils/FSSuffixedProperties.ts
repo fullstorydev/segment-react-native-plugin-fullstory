@@ -9,11 +9,11 @@ import type {
 export class FSSuffixedProperties {
   private suffixedProperties: { [key: string]: any } = {};
 
-  constructor(properties: JsonMap) {
+  constructor(properties?: JsonMap) {
     this.initialize(properties);
   }
 
-  initialize(properties: JsonMap) {
+  initialize(properties?: JsonMap) {
     this.suffixedProperties = {};
 
     const stack = [properties];
@@ -50,7 +50,7 @@ export class FSSuffixedProperties {
   getSuffixStringFromSimpleObject(item: JsonValue): String {
     let suffix = '';
 
-    if (!isNaN(Number(item)) && !isNaN(parseFloat(String(item)))) {
+    if (typeof item === 'number') {
       if (Number.isInteger(item)) {
         suffix = '_int';
       } else {

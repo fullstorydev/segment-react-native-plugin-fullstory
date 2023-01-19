@@ -22,6 +22,11 @@ describe('FSSuffixedProperties', () => {
         fsSuffixedProperties.getSuffixStringFromSimpleObject('sample string')
       ).toBe('_str');
     });
+    test('Should return correct String suffix from numeric string', () => {
+      expect(fsSuffixedProperties.getSuffixStringFromSimpleObject('1')).toBe(
+        '_str'
+      );
+    });
     test('Should return correct Boolean suffix', () => {
       expect(fsSuffixedProperties.getSuffixStringFromSimpleObject(true)).toBe(
         '_bool'
