@@ -2,25 +2,76 @@
 # See: https://circleci.com/docs/2.0/configuration-reference
 version: 2.1
 
+executors:
+  browser-executor:
+    docker:
+      - image: circleci/node:16-browsers
+    working_directory: ~/repo
 # Define a job to be invoked later in a workflow.
 # See: https://circleci.com/docs/2.0/configuration-reference/#jobs
 jobs:
-  say-hello:
-    # Specify the execution environment. You can specify an image from Dockerhub or use one of our Convenience Images from CircleCI's Developer Hub.
-    # See: https://circleci.com/docs/2.0/configuration-reference/#docker-machine-macos-windows-executor
-    docker:
-      - image: cimg/base:stable
+  build-plugin:
+    executor: browser-executor
     # Add steps to the job
     # See: https://circleci.com/docs/2.0/configuration-reference/#steps
     steps:
       - checkout
+      - restore_cache:
+          keys:
+            - v1-dependencies-{{ checksum "package-lock.json" }}
       - run:
-          name: "Say hello"
-          command: "echo Hello, World!"
+          name: Install
+          command: npm ci
+      - save_cache:
+          paths:
+            - node_modules
+          key: v1-dependencies-{{ checksum "package-lock.json" }}
+      - run:
+          name: Audit
+          command: npm audit --audit-level=low
+      - run:
+          name: Test
+          command: npm test
+      - run:
+          name: Build
+          command: npm run prepack
+      - persist_to_workspace:
+          root: .
+          paths: [.]
+  deploy-plugin:
+    executor: browser-executor
+    steps: 
+      - attach_workspace:
+          at: ~/repo
+      - run:
+          name: Authenticate with registry
+          command: echo "//registry.npmjs.org/:_authToken=$npm_TOKEN" > .npmrc
+      - run:
+          name: Publish package
+          command: npm publish --access public
 
 # Invoke jobs via workflows
 # See: https://circleci.com/docs/2.0/configuration-reference/#workflows
 workflows:
-  say-hello-workflow:
+  test-deploy:
     jobs:
-      - say-hello
+      - build-plugin
+      - hold:
+          type: approval
+          requires:
+            - build-plugin
+          filters:
+            # hold only on version tags
+            tags:
+              only: /^v.*/
+            branches:
+              ignore: /.*/
+      - deploy-plugin:
+          requires:
+            - hold
+          filters:
+            # deploy only on version tags
+            tags:
+              only: /^v.*/
+            branches:
+              ignore: /.*/

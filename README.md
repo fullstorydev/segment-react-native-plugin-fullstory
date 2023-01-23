@@ -1,5 +1,7 @@
 # @fullstory/segment-react-native-plugin-fullstory
 
+[![CircleCI](https://circleci.com/gh/fullstorydev/segment-react-native-plugin-fullstory.svg?style=svg)](https://circleci.com/gh/fullstorydev/segment-react-native-plugin-fullstory)
+
 `EnrichmentPlugin` for [FullStory](https://www.fullstory.com/). This is a segment analytics plugin that wraps [`@fullstory/react-native`](https://github.com/fullstorydev/fullstory-react-native).
 
 ## Prerequisite
