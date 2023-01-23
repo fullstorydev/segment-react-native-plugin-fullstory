@@ -38,6 +38,17 @@ jobs:
       - persist_to_workspace:
           root: .
           paths: [.]
+  deploy-plugin:
+    executor: browser-executor
+    steps: 
+      - attach_workspace:
+          at: ~/repo
+      - run:
+          name: Authenticate with registry
+          command: echo "//registry.npmjs.org/:_authToken=$npm_TOKEN" > .npmrc
+      - run:
+          name: Publish package
+          command: npm publish --access public
 
 # Invoke jobs via workflows
 # See: https://circleci.com/docs/2.0/configuration-reference/#workflows
@@ -51,6 +62,15 @@ workflows:
             - build-plugin
           filters:
             # hold only on version tags
+            tags:
+              only: /^v.*/
+            branches:
+              ignore: /.*/
+      - deploy-plugin:
+          requires:
+            - hold
+          filters:
+            # deploy only on version tags
             tags:
               only: /^v.*/
             branches:
