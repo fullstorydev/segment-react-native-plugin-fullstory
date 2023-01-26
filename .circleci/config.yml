@@ -55,7 +55,10 @@ jobs:
 workflows:
   test-deploy:
     jobs:
-      - build-plugin
+      - build-plugin:
+          filters:
+              tags:
+                only: /.*/
       - hold:
           type: approval
           requires:
