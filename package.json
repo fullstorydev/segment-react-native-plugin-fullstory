@@ -1,6 +1,6 @@
 {
   "name": "@fullstory/segment-react-native-plugin-fullstory",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "description": "Integrate FullStory with your Segment analytics in your React-Native app.",
   "main": "lib/commonjs/index",
   "module": "lib/module/index",
