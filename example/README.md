@@ -4,8 +4,10 @@ This is a test app for the FullStory Segment react native plugin.
 
 ## Getting Started
 
-1. Ensure you have installed `node_modules` in the root directory.
-2. Install `node_modules` in the example directory.
+1. Ensure that you have completed the react-native CLI environment setup guide.
+2. Ensure you have cocoapods installed `brew install cocoapods`
+3. Ensure you have installed `node_modules` in the root directory.
+4. Install `node_modules` in the example directory.
 
 ```
 npm i
