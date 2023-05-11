@@ -47,22 +47,22 @@ export const eCommerceEventsProductListFilteredRaw = {
 };
 
 export const eCommerceEventsProductListFilteredProcessed = {
-  'list_id_str': 'todays_deals_may_11_2019',
-  'filters.type_strs': ['department', 'price'],
-  'filters.value_strs': ['beauty', 'under-$25'],
-  'sorts.type_str': 'price',
-  'sorts.value_str': 'desc',
-  'products.product_id_strs': [
+  'list_id': 'todays_deals_may_11_2019',
+  'filters.type': ['department', 'price'],
+  'filters.value': ['beauty', 'under-$25'],
+  'sorts.type': 'price',
+  'sorts.value': 'desc',
+  'products.product_id': [
     '507f1f77bcf86cd798439011',
     '505bd76785ebb509fc283733',
   ],
-  'products.sku_strs': ['45360-32', '46573-32'],
-  'products.name_strs': ['Special Facial Soap', 'Fancy Hairbrush'],
-  'products.price_reals': [12.6, 7.6],
-  'products.position_ints': [1, 2],
-  'products.category_strs': ['Beauty', 'Beauty'],
-  'products.url_str': 'https://www.example.com/product/path',
-  'products.image_url_str': 'https://www.example.com/product/path.jpg',
+  'products.sku': ['45360-32', '46573-32'],
+  'products.name': ['Special Facial Soap', 'Fancy Hairbrush'],
+  'products.price': [12.6, 7.6],
+  'products.position': [1, 2],
+  'products.category': ['Beauty', 'Beauty'],
+  'products.url': 'https://www.example.com/product/path',
+  'products.image_url': 'https://www.example.com/product/path.jpg',
 };
 
 export const EVENT_NAME = 'sample event';

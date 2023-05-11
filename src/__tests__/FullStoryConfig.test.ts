@@ -79,7 +79,7 @@ describe('FullStoryConfig', () => {
       });
 
       expect(FullStory.event).toHaveBeenCalledWith(EVENT_NAME, {
-        sampleProperty_str: SAMPLE_PROPERTY,
+        sampleProperty: SAMPLE_PROPERTY,
       });
     });
 
@@ -94,7 +94,7 @@ describe('FullStoryConfig', () => {
       });
 
       expect(FullStory.event).toHaveBeenCalledWith(EVENT_NAME, {
-        sampleProperty_str: SAMPLE_PROPERTY,
+        sampleProperty: SAMPLE_PROPERTY,
       });
     });
   });
@@ -110,7 +110,7 @@ describe('FullStoryConfig', () => {
       });
 
       expect(FullStory.identify).toHaveBeenCalledWith(USER_ID, {
-        sampleTrait_str: SAMPLE_TRAIT,
+        sampleTrait: SAMPLE_TRAIT,
       });
     });
 
@@ -147,7 +147,7 @@ describe('FullStoryConfig', () => {
 
       expect(FullStory.event).toHaveBeenCalledWith(
         'Segment Screen: ' + SCREEN_NAME,
-        { sampleProperty_str: SAMPLE_PROPERTY }
+        { sampleProperty: SAMPLE_PROPERTY }
       );
     });
   });
@@ -163,7 +163,7 @@ describe('FullStoryConfig', () => {
       });
 
       expect(FullStory.setUserVars).toHaveBeenCalledWith({
-        groupID_str: GROUP_ID,
+        groupID: GROUP_ID,
       });
     });
 
@@ -177,8 +177,8 @@ describe('FullStoryConfig', () => {
       });
 
       expect(FullStory.setUserVars).toHaveBeenCalledWith({
-        groupID_str: GROUP_ID,
-        sampleTrait_str: SAMPLE_TRAIT,
+        groupID: GROUP_ID,
+        sampleTrait: SAMPLE_TRAIT,
       });
     });
   });

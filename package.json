@@ -43,7 +43,7 @@
     "@segment/analytics-react-native": "*"
   },
   "dependencies": {
-    "@fullstory/react-native": "^1.1.1",
+    "@fullstory/react-native": "^1.1.2",
     "lodash.isplainobject": "^4.0.6"
   },
   "devDependencies": {

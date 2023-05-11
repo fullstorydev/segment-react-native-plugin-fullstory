@@ -6,7 +6,7 @@ import {
   ScreenEventType,
 } from '@segment/analytics-react-native';
 import FullStory from '@fullstory/react-native';
-import { FSSuffixedProperties } from './utils/FSSuffixedProperties';
+import { FSProperties } from './utils/FSProperties';
 
 interface FullStoryPluginConfig {
   enableFSSessionUrlInEvents?: boolean;
@@ -62,8 +62,8 @@ export class FullStoryPlugin extends Plugin {
           (this.allowlistTrackEvents &&
             this.allowlistTrackEvents.includes(event.event))
         ) {
-          const fsProps = new FSSuffixedProperties(event.properties);
-          FullStory.event(event.event, fsProps.getSuffixedProperties());
+          const fsProps = new FSProperties(event.properties);
+          FullStory.event(event.event, fsProps.getProperties());
 
           if (this.enableFSSessionURLInEvents && this.fsSessionUrl) {
             this.addFSUrlToProperties(event as TrackEventType);
@@ -72,17 +72,17 @@ export class FullStoryPlugin extends Plugin {
         break;
       case 'identify':
         if (this.enableIdentifyEvents) {
-          const traits = new FSSuffixedProperties(
+          const traits = new FSProperties(
             event.traits
-          ).getSuffixedProperties();
+          ).getProperties();
           FullStory.identify(event.userId || '', traits);
         }
         break;
       case 'screen':
         if (this.enableSendScreenAsEvents) {
-          const properties = new FSSuffixedProperties(
+          const properties = new FSProperties(
             event.properties
-          ).getSuffixedProperties();
+          ).getProperties();
 
           FullStory.event('Segment Screen: ' + event.name, properties);
           if (this.enableFSSessionURLInEvents && this.fsSessionUrl) {
@@ -94,12 +94,12 @@ export class FullStoryPlugin extends Plugin {
         let traits;
 
         if (this.enableGroupTraitsAsUserVars) {
-          traits = new FSSuffixedProperties(
+          traits = new FSProperties(
             event.traits
-          ).getSuffixedProperties();
+          ).getProperties();
         }
 
-        FullStory.setUserVars({ groupID_str: event.groupId, ...traits });
+        FullStory.setUserVars({ groupID: event.groupId, ...traits });
         break;
     }
 
